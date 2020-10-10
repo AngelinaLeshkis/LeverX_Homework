@@ -13,10 +13,10 @@ public class GameProcess {
         int numberOfVariant = 0;
         System.out.println("If you want to play with the computer please enter the number 1, but if you want to play" +
                 " with your friend enter the number 2:");
-        Scanner choiceViewOfPLay = new Scanner(System.in);
+        Scanner chooseViewOfPLay = new Scanner(System.in);
         boolean fl = false;
         while (!fl) {
-            numberOfVariant = choiceViewOfPLay.nextInt();
+            numberOfVariant = chooseViewOfPLay.nextInt();
             if (numberOfVariant == 1) {
                 computerAndHumanMode();
                 fl = true;
@@ -42,6 +42,7 @@ public class GameProcess {
             gameField.getCells()[numberOfSelectedCell] = isCurrentX ? 1 : 2;
             gameOver = isGameOver(numberOfSelectedCell);
             if (isDraw()) {
+                gameField.drawCells();
                 System.out.println("The game ended in a draw.");
                 return;
             }
@@ -76,6 +77,7 @@ public class GameProcess {
                 gameField.drawCells();
             }
             if (isDraw()) {
+                gameField.drawCells();
                 System.out.println("The game ended in a draw.");
                 return;
             }
@@ -86,26 +88,24 @@ public class GameProcess {
     }
 
     public boolean isGameOver(int numberOfSelectedCell) {
-        //поиск совпадений по горизонтали
-        int row = numberOfSelectedCell - numberOfSelectedCell % 3; //номер строки - проверяем только её
+        //searching for matches in the row
+        int row = numberOfSelectedCell - numberOfSelectedCell % 3;
         if (gameField.getCells()[row] == gameField.getCells()[row + 1] &&
                 gameField.getCells()[row] == gameField.getCells()[row + 2]) {
             return true;
         }
-        //поиск совпадений по вертикали
-        int column = numberOfSelectedCell % 3; //номер столбца - проверяем только его
+        //searching for matches in the column
+        int column = numberOfSelectedCell % 3;
         if (gameField.getCells()[column] == gameField.getCells()[column + 3])
             if (gameField.getCells()[column] == gameField.getCells()[column + 6]) {
                 return true;
             }
-        //мы здесь, значит, первый поиск не положительного результата
-        //если значение n находится на одной из граней - возвращаем false
+
         if (numberOfSelectedCell % 2 != 0) {
             return false;
         }
-        //проверяем принадлежит ли к левой диагонали значение
+        //searching for matches in the diagonal
         if (numberOfSelectedCell % 4 == 0) {
-            //проверяем есть ли совпадения на левой диагонали
             if (gameField.getCells()[0] == gameField.getCells()[4] &&
                     gameField.getCells()[0] == gameField.getCells()[8]) {
                 return true;
